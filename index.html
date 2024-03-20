@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driving License Renewal</title>
+  <style>
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #eee;
+      margin-top: 20px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background-color: #4caf50;
+    }
+
+    .question {
+      display: none;
+    }
+
+    .question.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<h1>Let's Get Started</h1>
+<div class="questions">
+  <div class="question active">
+    <p>Enter your name:</p>
+    <input type="text" class="answer">
+  </div>
+  <div class="question">
+    <p>Enter your address:</p>
+    <input type="text" class="answer">
+  </div>
+  <div class="question">
+    <p>Enter your date of birth:</p>
+    <input type="date" class="answer">
+  </div>
+  <div class="question">
+    <p>Select your driving license type:</p>
+    <select class="answer">
+      <option value="">Select an option</option>
+      <option value="type1">Paper driving license</option>
+      <option value="type2">Smart driving license</option>
+    </select>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const questions = document.querySelectorAll('.question');
+    const progress = document.querySelector('.progress');
+
+    let currentIndex = 0;
+
+    questions.forEach((question, index) => {
+      const inputs = question.querySelectorAll('.answer');
+      
+      inputs.forEach(input => {
+        input.addEventListener('input', () => {
+          const charactersEntered = Array.from(inputs).reduce((acc, curr) => acc + curr.value.length, 0);
+          if (charactersEntered >= 3 || (input.tagName === 'SELECT' && input.value !== '')) {
+            currentIndex = index + 1;
+            showNextQuestion();
+          }
+        });
+      });
+    });
+
+    function showNextQuestion() {
+      if (currentIndex < questions.length) {
+        questions.forEach(question => {
+          question.classList.remove('active');
+        });
+        questions[currentIndex].classList.add('active');
+        updateProgressBar();
+      } else {
+        alert('Congratulations! Your driving license renewal form is complete.');
+      }
+    }
+
+    function updateProgressBar() {
+      const percentage = ((currentIndex + 1) / questions.length) * 100;
+      progress.style.width = percentage + '%';
+    }
+  });
+</script>
+
+</body>
+</html>
